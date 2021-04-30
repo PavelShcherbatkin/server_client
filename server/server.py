@@ -1,8 +1,16 @@
-import http.server
-import socketserver
+import socket
 
-handler = http.server.SimpleHTTPRequestHandler
+sock = socket.socket()
+sock.bind(('', 9090))
+sock.listen(1)
+conn, addr = sock.accept()
 
-with socketserver.TCPServer(("", 1234), handler) as httpd:
-
-   httpd.serve_forever()
+print('Здесь происходить обработка перенаправленного url')
+print('connected:', addr)
+data = conn.recv(4096)
+b = data.decode('utf-8').split(' ')[1]
+url = f'http://localhost:9090' + b
+conn.send(url)
+conn.close()
+print('connection close:')
+print(url)

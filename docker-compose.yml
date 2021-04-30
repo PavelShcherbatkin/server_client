@@ -1,6 +1,22 @@
-version: "3"
+version: "3.1"
 
 services:
+
+  db:
+    container_name: database
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - "./client/.env"
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 
   server:
     build: server/
@@ -8,9 +24,13 @@ services:
     ports:
       - 1234:1234
 
-  client:
+  tgbot:
+    container_name: bot
     build: client/
-    command: python ./client.py
-    network_mode: host
+    command: python ./app.py
+    restart: always
+    network_mode: "host"
+    env_file:
+      - "./client/.env"
     depends_on:
-      - servers
+      - server

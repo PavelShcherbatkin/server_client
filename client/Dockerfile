@@ -1,5 +1,7 @@
 FROM python:latest
 
-ADD client.py /client/
+ADD app.py /client/
 
 WORKDIR /client/
+
+RUN pip install -r requirements.txt
